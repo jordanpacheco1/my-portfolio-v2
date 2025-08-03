@@ -1,6 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import Autoplay from 'embla-carousel-autoplay'
-import { ExternalLink } from 'lucide-react'
+import {
+  ExternalLink,
+  GitFork,
+  Globe,
+  Loader2,
+  RefreshCw,
+  Star
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Badge } from '../components/ui/badge'
@@ -25,6 +33,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '../components/ui/tooltip'
+import { fetchProjects } from '../lib/github'
 
 export const Route = createFileRoute('/projects')({
   component: Projects
@@ -33,296 +42,111 @@ export const Route = createFileRoute('/projects')({
 function Projects() {
   const { t } = useTranslation()
 
+  const {
+    data: projects = [],
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
+    queryKey: ['github-projects'],
+    queryFn: fetchProjects,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000 // 10 minutes
+  })
+
   const handleExternalLinkClick = (projectName: string) => {
     toast.success(`Opening ${projectName} on GitHub`)
   }
 
-  const projects = [
-    {
-      name: 'NLW Agents',
-      description: 'AI-powered agents platform built with modern technologies',
-      url: 'https://github.com/jordanpacheco1/nlwAgents',
-      technologies: ['AI', 'TypeScript', 'Node.js']
-    },
-    {
-      name: 'Ignite Lab Design System',
-      description:
-        'Modern design system built with React, Storybook and Radix UI',
-      url: 'https://github.com/jordanpacheco1/ignite-lab-design-system',
-      technologies: [
-        'React',
-        'TypeScript',
-        'Storybook',
-        'Radix UI',
-        'Tailwind CSS'
-      ]
-    },
-    {
-      name: 'NLW Copa',
-      description: 'Fullstack application for World Cup betting pools',
-      url: 'https://github.com/jordanpacheco1/nlw-copa',
-      technologies: ['React', 'React Native', 'Node.js', 'TypeScript', 'Prisma']
-    },
-    {
-      name: 'Gympoint',
-      description:
-        'Complete gym management system with web and mobile applications',
-      url: 'https://github.com/jordanpacheco1/Gympoint',
-      technologies: ['React', 'React Native', 'Node.js', 'PostgreSQL', 'Redux']
-    },
-    {
-      name: 'Podcastr',
-      description:
-        'Modern podcast platform with audio player and episode management',
-      url: 'https://github.com/jordanpacheco1/podcastr-nlw-5',
-      technologies: ['Next.js', 'React', 'TypeScript', 'Sass', 'Context API']
-    },
-    {
-      name: 'NLW Expert Notes',
-      description: 'Note-taking application with voice recording capabilities',
-      url: 'https://github.com/jordanpacheco1/nlw-expert-notes',
-      technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS']
-    },
-    {
-      name: 'NLW Move.it',
-      description: 'Pomodoro timer with exercise challenges for developers',
-      url: 'https://github.com/jordanpacheco1/nlw-move-it',
-      technologies: ['Next.js', 'React', 'TypeScript', 'CSS Modules']
-    },
-    {
-      name: 'NLW Expert C# Auction',
-      description: 'Auction system built with C# and .NET technologies',
-      url: 'https://github.com/jordanpacheco1/nlw-expert-c-sharp-rocketseat-auction',
-      technologies: ['C#', '.NET', 'Entity Framework', 'SQL Server']
-    },
-    {
-      name: 'Quality Auth',
-      description: 'Authentication system for Quality Systems ReactJS position',
-      url: 'https://github.com/jordanpacheco1/quality-auth',
-      technologies: ['React', 'JavaScript', 'CSS']
-    },
-    {
-      name: 'GoStack9 Módulo 03',
-      description: 'GoBarber project from GoStack9 bootcamp module 3',
-      url: 'https://github.com/jordanpacheco1/GoStack9-Modulo03',
-      technologies: ['React', 'Node.js', 'Express', 'PostgreSQL']
-    },
-    {
-      name: 'GoStack09 Módulo 05',
-      description: 'First ReactJS project from GoStack9 bootcamp',
-      url: 'https://github.com/jordanpacheco1/GoStack09-Modulo05',
-      technologies: ['React', 'JavaScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack Conceitos ReactJS',
-      description: 'ReactJS fundamentals challenge from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gostack-conceitos-reactjs',
-      technologies: ['React', 'JavaScript', 'Webpack']
-    },
-    {
-      name: 'Desafios Conceitos Node GoStack',
-      description: 'Node.js fundamentals challenge from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/desafios-conceitos-node-gostack',
-      technologies: ['Node.js', 'Express', 'JavaScript']
-    },
-    {
-      name: 'Desafio Fundamentos NodeJS',
-      description: 'Node.js fundamentals challenge with file upload',
-      url: 'https://github.com/jordanpacheco1/desafio-fundamentos-nodejs',
-      technologies: ['Node.js', 'TypeScript', 'Express']
-    },
-    {
-      name: 'GoStack Conceitos React Native',
-      description: 'React Native fundamentals challenge from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gostack-conceitos-react-native',
-      technologies: ['React Native', 'JavaScript', 'Metro']
-    },
-    {
-      name: 'GoStack Database Upload',
-      description: 'Database and file upload challenge from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gostack-database-upload',
-      technologies: ['Node.js', 'TypeScript', 'TypeORM', 'PostgreSQL']
-    },
-    {
-      name: 'GoStack Database Relations',
-      description: 'Database relationships challenge from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gostack-database-relations',
-      technologies: ['Node.js', 'TypeScript', 'TypeORM', 'PostgreSQL']
-    },
-    {
-      name: 'GoStack Template React Native',
-      description: 'React Native template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-react-native-delivery',
-      technologies: ['React Native', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack Template NodeJS',
-      description: 'Node.js template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-typeorm-upload',
-      technologies: ['Node.js', 'TypeScript', 'TypeORM', 'Express']
-    },
-    {
-      name: 'GoStack Template ReactJS',
-      description: 'ReactJS template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-reactjs-crud',
-      technologies: ['React', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack Template Fundamentos Node',
-      description: 'Node.js fundamentals template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-fundamentos-node',
-      technologies: ['Node.js', 'TypeScript', 'Express']
-    },
-    {
-      name: 'GoStack Template Fundamentos ReactJS',
-      description: 'ReactJS fundamentals template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-fundamentos-reactjs',
-      technologies: ['React', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack Template Fundamentos React Native',
-      description: 'React Native fundamentals template for GoStack challenges',
-      url: 'https://github.com/jordanpacheco1/gostack-template-fundamentos-react-native',
-      technologies: ['React Native', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack Typeorm Relations',
-      description: 'TypeORM relationships implementation for GoStack',
-      url: 'https://github.com/jordanpacheco1/gostack-typeorm-relations',
-      technologies: ['Node.js', 'TypeScript', 'TypeORM', 'PostgreSQL']
-    },
-    {
-      name: 'GoStack Typeorm Upload',
-      description: 'File upload with TypeORM for GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gostack-typeorm-upload',
-      technologies: ['Node.js', 'TypeScript', 'TypeORM', 'Multer']
-    },
-    {
-      name: 'Fastfeet',
-      description: 'Delivery management system from GoStack final challenge',
-      url: 'https://github.com/jordanpacheco1/fastfeet',
-      technologies: ['React', 'React Native', 'Node.js', 'PostgreSQL', 'Redis']
-    },
-    {
-      name: 'GoBarber',
-      description: 'Barber shop scheduling system from GoStack bootcamp',
-      url: 'https://github.com/jordanpacheco1/gobarber',
-      technologies: [
-        'React',
-        'React Native',
-        'Node.js',
-        'TypeScript',
-        'PostgreSQL'
-      ]
-    },
-    {
-      name: 'GoStack GoBarber API',
-      description: 'GoBarber backend API with authentication and scheduling',
-      url: 'https://github.com/jordanpacheco1/gostack-gobarber-api',
-      technologies: [
-        'Node.js',
-        'TypeScript',
-        'Express',
-        'TypeORM',
-        'PostgreSQL'
-      ]
-    },
-    {
-      name: 'GoStack GoBarber Web',
-      description: 'GoBarber web frontend for barber shop management',
-      url: 'https://github.com/jordanpacheco1/gostack-gobarber-web',
-      technologies: ['React', 'TypeScript', 'Styled Components', 'Axios']
-    },
-    {
-      name: 'GoStack GoBarber Mobile',
-      description: 'GoBarber mobile app for customers to schedule appointments',
-      url: 'https://github.com/jordanpacheco1/gostack-gobarber-mobile',
-      technologies: ['React Native', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack React Native Delivery',
-      description: 'Food delivery app built with React Native',
-      url: 'https://github.com/jordanpacheco1/gostack-react-native-delivery',
-      technologies: ['React Native', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'GoStack ReactJS CRUD',
-      description: 'CRUD application built with ReactJS',
-      url: 'https://github.com/jordanpacheco1/gostack-reactjs-crud',
-      technologies: ['React', 'TypeScript', 'Styled Components']
-    },
-    {
-      name: 'Ecoleta',
-      description: 'Waste collection marketplace from Next Level Week',
-      url: 'https://github.com/jordanpacheco1/ecoleta',
-      technologies: ['React', 'React Native', 'Node.js', 'TypeScript', 'SQLite']
-    },
-    {
-      name: 'Be The Hero',
-      description: 'Platform connecting NGOs with people who want to help',
-      url: 'https://github.com/jordanpacheco1/be-the-hero',
-      technologies: ['React', 'React Native', 'Node.js', 'SQLite']
-    },
-    {
-      name: 'Aircnc',
-      description: 'Airbnb clone for developers to find tech spots',
-      url: 'https://github.com/jordanpacheco1/aircnc',
-      technologies: ['React', 'React Native', 'Node.js', 'MongoDB']
-    },
-    {
-      name: 'DevRadar',
-      description: 'Platform to find developers near you based on technologies',
-      url: 'https://github.com/jordanpacheco1/devradar',
-      technologies: ['React', 'React Native', 'Node.js', 'MongoDB']
-    },
-    {
-      name: 'TinDev',
-      description: 'Tinder for developers to connect based on GitHub profiles',
-      url: 'https://github.com/jordanpacheco1/tindev',
-      technologies: ['React', 'React Native', 'Node.js', 'MongoDB']
-    },
-    {
-      name: 'Proffy',
-      description: 'Online teaching platform connecting students and teachers',
-      url: 'https://github.com/jordanpacheco1/proffy',
-      technologies: ['React', 'React Native', 'Node.js', 'TypeScript', 'SQLite']
-    },
-    {
-      name: 'Happy',
-      description: 'Platform to find and visit orphanages near you',
-      url: 'https://github.com/jordanpacheco1/happy',
-      technologies: ['React', 'React Native', 'Node.js', 'TypeScript', 'SQLite']
-    },
-    {
-      name: 'Plant Manager',
-      description: 'Plant care reminder app with watering schedules',
-      url: 'https://github.com/jordanpacheco1/plantmanager',
-      technologies: ['React Native', 'TypeScript', 'Expo']
-    },
-    {
-      name: 'GamePlay',
-      description: 'Discord integration app for gaming communities',
-      url: 'https://github.com/jordanpacheco1/gameplay',
-      technologies: ['React Native', 'TypeScript', 'Expo', 'Discord API']
-    },
-    {
-      name: 'RentX',
-      description: 'Car rental application with modern UI',
-      url: 'https://github.com/jordanpacheco1/rentx',
-      technologies: ['React Native', 'TypeScript', 'Styled Components']
-    }
-  ]
+  const handleRefresh = () => {
+    refetch()
+    toast.info('Refreshing projects from GitHub...')
+  }
+
+  if (isLoading) {
+    return (
+      <div className='container mx-auto px-4 py-8'>
+        <div className='mx-auto max-w-7xl'>
+          <div className='mb-12 text-center'>
+            <h1 className='mb-4 font-bold text-4xl'>{t('projects.title')}</h1>
+            <p className='text-muted-foreground text-xl'>
+              {t('projects.description')}
+            </p>
+          </div>
+          <div className='flex items-center justify-center py-12'>
+            <div className='flex flex-col items-center gap-4'>
+              <Loader2 className='h-8 w-8 animate-spin' />
+              <p className='text-muted-foreground'>
+                Loading projects from GitHub...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className='container mx-auto px-4 py-8'>
+        <div className='mx-auto max-w-7xl'>
+          <div className='mb-12 text-center'>
+            <h1 className='mb-4 font-bold text-4xl'>{t('projects.title')}</h1>
+            <p className='text-muted-foreground text-xl'>
+              {t('projects.description')}
+            </p>
+          </div>
+          <div className='flex items-center justify-center py-12'>
+            <div className='flex flex-col items-center gap-4 text-center'>
+              <div className='rounded-full bg-red-100 p-3 dark:bg-red-900/20'>
+                <ExternalLink className='h-6 w-6 text-red-600 dark:text-red-400' />
+              </div>
+              <div>
+                <h3 className='font-semibold text-lg'>
+                  Failed to load projects
+                </h3>
+                <p className='text-muted-foreground text-sm'>
+                  {error instanceof Error
+                    ? error.message
+                    : 'Unable to fetch repositories from GitHub'}
+                </p>
+              </div>
+              <Button
+                className='mt-2'
+                onClick={handleRefresh}
+                variant='outline'
+              >
+                <RefreshCw className='mr-2 h-4 w-4' />
+                Try Again
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='mx-auto max-w-7xl'>
         <div className='mb-12 text-center'>
-          <h1 className='mb-4 font-bold text-4xl'>{t('projects.title')}</h1>
+          <div className='mb-4 flex items-center justify-center gap-4'>
+            <h1 className='font-bold text-4xl'>{t('projects.title')}</h1>
+            <Button
+              className='ml-2'
+              onClick={handleRefresh}
+              size='sm'
+              variant='outline'
+            >
+              <RefreshCw className='h-4 w-4' />
+            </Button>
+          </div>
           <p className='text-muted-foreground text-xl'>
             {t('projects.description')}
           </p>
           <p className='mt-2 text-muted-foreground text-sm'>
-            {projects.length} {t('projects.publicRepositories')}
+            Showing {projects.length} public repositories from GitHub
           </p>
         </div>
 
@@ -340,47 +164,68 @@ function Projects() {
                 >
                   <Card className='group flex h-full w-full max-w-full select-none flex-col overflow-hidden transition-shadow hover:shadow-lg'>
                     <CardHeader className='pb-3'>
-                      <CardTitle className='flex min-w-0 items-center justify-between gap-2 text-lg leading-tight'>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className='min-w-0 flex-1 cursor-help overflow-hidden truncate text-ellipsis whitespace-nowrap font-semibold'>
-                              {project.name}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{project.name}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <div className='ml-2 flex flex-shrink-0 gap-1'>
-                          <Button asChild size='sm' variant='outline'>
-                            <a
-                              href={project.url}
-                              rel='noopener noreferrer'
-                              target='_blank'
-                              onClick={() => handleExternalLinkClick(project.name)}
-                            >
-                              <ExternalLink className='h-4 w-4' />
-                            </a>
-                          </Button>
-                          <Button asChild size='sm' variant='outline'>
-                            <a
-                              href={project.url}
-                              rel='noopener noreferrer'
-                              target='_blank'
-                              onClick={() => handleExternalLinkClick(project.name)}
-                            >
-                              <img
-                                alt='GitHub icon'
-                                className='h-4 w-4'
-                                src='/github-icon.svg'
-                              />
-                            </a>
-                          </Button>
+                      <CardTitle className='flex items-center justify-between'>
+                        <span>{project.name}</span>
+                        <div className='flex items-center gap-1'>
+                          {project.demoUrl && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  onClick={() => {
+                                    window.open(project.demoUrl, '_blank')
+                                    handleExternalLinkClick(
+                                      `${project.name} Demo`
+                                    )
+                                  }}
+                                  size='sm'
+                                  variant='ghost'
+                                >
+                                  <Globe className='h-4 w-4' />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>View Demo</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                          {!project.private && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  onClick={() => {
+                                    window.open(project.url, '_blank')
+                                    handleExternalLinkClick(project.name)
+                                  }}
+                                  size='sm'
+                                  variant='ghost'
+                                >
+                                  <ExternalLink className='h-4 w-4' />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>View on GitHub</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
                         </div>
                       </CardTitle>
-                      <CardDescription className='mt-1 line-clamp-2 text-muted-foreground text-sm'>
+                      <CardDescription>
                         {project.description || 'No description available'}
                       </CardDescription>
+                      <div className='mt-2 flex items-center gap-4 text-muted-foreground text-xs'>
+                        {project.stars !== undefined && (
+                          <div className='flex items-center gap-1'>
+                            <Star className='h-3 w-3' />
+                            <span>{project.stars}</span>
+                          </div>
+                        )}
+                        {project.forks !== undefined && (
+                          <div className='flex items-center gap-1'>
+                            <GitFork className='h-3 w-3' />
+                            <span>{project.forks}</span>
+                          </div>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className='flex-1 pt-0'>
                       <div className='flex flex-wrap gap-1'>
