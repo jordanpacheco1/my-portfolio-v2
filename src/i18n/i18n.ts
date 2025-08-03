@@ -29,7 +29,8 @@ const enTranslations = {
     description: 'Learn more about my skills and experience.',
     personal: {
       title: 'Personal Information',
-      languages: 'Portuguese (Native), English (Fluent since age 14)',
+      languages:
+        'Portuguese (Native), English (Fluent since age 14), Italian (Intermediate)',
       description:
         'Passionate about technology since age 7, I have been developing my skills in web development and always seeking to learn new technologies and best practices.'
     },
@@ -101,7 +102,8 @@ const ptBRTranslations = {
     description: 'Saiba mais sobre minhas habilidades e experiência.',
     personal: {
       title: 'Informações Pessoais',
-      languages: 'Português (Nativo), Inglês (Fluente desde os 14 anos)',
+      languages:
+        'Português (Nativo), Inglês (Fluente desde os 14 anos), Italiano (Intermediário)',
       description:
         'Apaixonado por tecnologia desde os 7 anos, venho desenvolvendo minhas habilidades em desenvolvimento web e sempre buscando aprender novas tecnologias e melhores práticas.'
     },
