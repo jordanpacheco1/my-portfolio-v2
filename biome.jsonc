@@ -1,0 +1,34 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "extends": ["ultracite"],
+  "formatter": {
+    "enabled": true
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "jsxQuoteStyle": "single",
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noConsole": "off"
+      },
+      "performance": {
+        "noImgElement": "off",
+        "noNamespaceImport": "off"
+      }
+    }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!src/routeTree.gen.ts",
+      "!src/routes/routeTree.gen.ts",
+      "!src/index.css"
+    ]
+  }
+}
