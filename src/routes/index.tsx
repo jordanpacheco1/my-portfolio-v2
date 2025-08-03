@@ -1,6 +1,7 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { Badge } from '@/components/ui/badge'
@@ -23,6 +24,14 @@ function Home() {
   const { t } = useTranslation()
   const router = useRouter()
 
+  const handleSocialLinkClick = (platform: string) => {
+    toast.success(`Opening ${platform} profile`)
+  }
+
+  const handleEmailClick = () => {
+    toast.success('Opening email client')
+  }
+
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center'>
@@ -38,6 +47,7 @@ function Home() {
           <Button asChild size='sm' variant='outline'>
             <a
               href='https://github.com/jordanpacheco1'
+              onClick={() => handleSocialLinkClick('GitHub')}
               rel='noopener noreferrer'
               target='_blank'
             >
@@ -52,6 +62,7 @@ function Home() {
           <Button asChild size='sm' variant='outline'>
             <a
               href='https://linkedin.com/in/jordan-pacheco'
+              onClick={() => handleSocialLinkClick('LinkedIn')}
               rel='noopener noreferrer'
               target='_blank'
             >
@@ -68,7 +79,7 @@ function Home() {
             </a>
           </Button>
           <Button asChild size='sm' variant='outline'>
-            <a href='mailto:contato.jpdev@gmail.com'>
+            <a href='mailto:contato.jpdev@gmail.com' onClick={handleEmailClick}>
               <Mail />
               Email
             </a>

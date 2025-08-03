@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Briefcase, GraduationCap, Languages, MapPin, User } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,6 +13,10 @@ export const Route = createFileRoute('/about')({
 
 function About() {
   const { t } = useTranslation()
+
+  const handleLinkedInClick = () => {
+    toast.success('Opening LinkedIn profile')
+  }
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -169,6 +174,7 @@ function About() {
                     href='https://linkedin.com/in/jordan-pacheco'
                     rel='noopener noreferrer'
                     target='_blank'
+                    onClick={handleLinkedInClick}
                   >
                     {t('about.cta.linkedin')}
                   </a>

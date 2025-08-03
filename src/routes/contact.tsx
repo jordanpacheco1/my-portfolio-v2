@@ -1,9 +1,9 @@
 import emailjs from '@emailjs/browser'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -39,10 +39,6 @@ function Contact() {
     resolver: zodResolver(contactFormSchema)
   })
 
-  const [submitStatus, setSubmitStatus] = useState<
-    'idle' | 'success' | 'error'
-  >('idle')
-
   // Form submission handler
   const onSubmit = async (data: ContactFormValues) => {
     try {
@@ -57,7 +53,7 @@ function Contact() {
         console.error(
           'EmailJS configuration missing. Please check your environment variables.'
         )
-        setSubmitStatus('error')
+        toast.error(t('contact.form.error'))
         return
       }
 
@@ -74,11 +70,11 @@ function Contact() {
         publicKey
       )
 
-      setSubmitStatus('success')
+      toast.success(t('contact.form.success'))
       reset()
     } catch (error) {
       console.error('Failed to send email:', error)
-      setSubmitStatus('error')
+      toast.error(t('contact.form.error'))
     }
   }
 
@@ -119,18 +115,6 @@ function Contact() {
           <Button className='w-full' disabled={isSubmitting} type='submit'>
             {isSubmitting ? t('contact.form.sending') : t('contact.form.send')}
           </Button>
-
-          {submitStatus === 'success' && (
-            <div className='mt-4 rounded-md bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400'>
-              <p className='font-medium text-sm'>{t('contact.form.success')}</p>
-            </div>
-          )}
-
-          {submitStatus === 'error' && (
-            <div className='mt-4 rounded-md bg-red-50 p-4 text-red-800 dark:bg-red-900/20 dark:text-red-400'>
-              <p className='font-medium text-sm'>{t('contact.form.error')}</p>
-            </div>
-          )}
         </form>
       </div>
     </div>

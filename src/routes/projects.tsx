@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import Autoplay from 'embla-carousel-autoplay'
 import { ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import {
@@ -31,6 +32,10 @@ export const Route = createFileRoute('/projects')({
 
 function Projects() {
   const { t } = useTranslation()
+
+  const handleExternalLinkClick = (projectName: string) => {
+    toast.success(`Opening ${projectName} on GitHub`)
+  }
 
   const projects = [
     {
@@ -352,6 +357,7 @@ function Projects() {
                               href={project.url}
                               rel='noopener noreferrer'
                               target='_blank'
+                              onClick={() => handleExternalLinkClick(project.name)}
                             >
                               <ExternalLink className='h-4 w-4' />
                             </a>
@@ -361,6 +367,7 @@ function Projects() {
                               href={project.url}
                               rel='noopener noreferrer'
                               target='_blank'
+                              onClick={() => handleExternalLinkClick(project.name)}
                             >
                               <img
                                 alt='GitHub icon'

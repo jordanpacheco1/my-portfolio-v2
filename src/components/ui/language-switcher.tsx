@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { BrazilFlag, USFlag } from '@/components/ui/flag-icons'
 
@@ -7,7 +8,13 @@ export function LanguageSwitcher() {
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'pt-BR' : 'en'
+    const langName = newLang === 'pt-BR' ? 'Português' : 'English'
     i18n.changeLanguage(newLang)
+    if (newLang === 'pt-BR') {
+      toast.success(`Idioma alterado para ${langName}`)
+    } else {
+      toast.success(`Language changed to ${langName}`)
+    }
   }
 
   return (
