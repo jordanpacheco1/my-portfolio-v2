@@ -51,7 +51,9 @@ export function Header() {
             <span>{t('nav.contact')}</span>
           </Link>
         </nav>
-        <LanguageSwitcher />
+        <div className='ml-4'>
+          <LanguageSwitcher />
+        </div>
       </div>
     </header>
   )
