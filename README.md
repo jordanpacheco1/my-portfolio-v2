@@ -4,7 +4,7 @@ A modern, responsive portfolio website built with React, TypeScript, and cutting
 
 ## 🚀 Live Demo
 
-[View Live Portfolio](http://localhost:5173) (Development)
+[View Live Portfolio](https://my-portfolio-v2-xi-lake.vercel.app/)
 
 ## ✨ Features
 
