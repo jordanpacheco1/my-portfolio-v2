@@ -68,7 +68,8 @@ const enTranslations = {
       message: 'Message',
       send: 'Send Message',
       sending: 'Sending...',
-      success: 'Message sent successfully!'
+      success: 'Message sent successfully!',
+      error: 'Failed to send message. Please try again.'
     }
   }
 }
@@ -139,7 +140,8 @@ const ptBRTranslations = {
       message: 'Mensagem',
       send: 'Enviar Mensagem',
       sending: 'Enviando...',
-      success: 'Mensagem enviada com sucesso!'
+      success: 'Mensagem enviada com sucesso!',
+      error: 'Falha ao enviar mensagem. Tente novamente.'
     }
   }
 }

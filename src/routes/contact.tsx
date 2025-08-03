@@ -1,5 +1,7 @@
+import emailjs from '@emailjs/browser'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -37,13 +39,47 @@ function Contact() {
     resolver: zodResolver(contactFormSchema)
   })
 
+  const [submitStatus, setSubmitStatus] = useState<
+    'idle' | 'success' | 'error'
+  >('idle')
+
   // Form submission handler
-  const onSubmit = async (_data: ContactFormValues) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    // Form data would be sent to an API here
-    reset()
-    alert(t('contact.form.success'))
+  const onSubmit = async (data: ContactFormValues) => {
+    try {
+      // EmailJS configuration from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      const recipientEmail = import.meta.env.VITE_RECIPIENT_EMAIL
+
+      // Check if all required environment variables are set
+      if (!(serviceId && templateId && publicKey && recipientEmail)) {
+        console.error(
+          'EmailJS configuration missing. Please check your environment variables.'
+        )
+        setSubmitStatus('error')
+        return
+      }
+
+      // Send email using EmailJS
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: data.name,
+          from_email: data.email,
+          message: data.message,
+          to_email: recipientEmail
+        },
+        publicKey
+      )
+
+      setSubmitStatus('success')
+      reset()
+    } catch (error) {
+      console.error('Failed to send email:', error)
+      setSubmitStatus('error')
+    }
   }
 
   return (
@@ -83,6 +119,18 @@ function Contact() {
           <Button className='w-full' disabled={isSubmitting} type='submit'>
             {isSubmitting ? t('contact.form.sending') : t('contact.form.send')}
           </Button>
+
+          {submitStatus === 'success' && (
+            <div className='mt-4 rounded-md bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400'>
+              <p className='font-medium text-sm'>{t('contact.form.success')}</p>
+            </div>
+          )}
+
+          {submitStatus === 'error' && (
+            <div className='mt-4 rounded-md bg-red-50 p-4 text-red-800 dark:bg-red-900/20 dark:text-red-400'>
+              <p className='font-medium text-sm'>{t('contact.form.error')}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>
